@@ -100,6 +100,7 @@ pub struct Cursor {
     pos: usize,
 }
 
+#[cfg(test)]
 impl Cursor {
     pub fn new(data: Vec<u8>) -> Self {
         Self { data, pos: 0 }
