@@ -303,16 +303,28 @@
 //! # Ok(())}
 //! ```
 
+#![cfg_attr(not(feature = "std"), no_std)]
+
+#[cfg(not(feature = "std"))]
+extern crate alloc;
+
 mod de;
 mod error;
 mod ser;
-pub mod test_helpers;
+#[cfg(test)]
+mod tests;
+
+#[cfg(feature = "std")]
+pub(crate) use std::io;
+
+#[cfg(not(feature = "std"))]
+pub(crate) mod io;
 
 /// Variable length sequences in BCS are limited to max length of 2^31 - 1.
 pub const MAX_SEQUENCE_LENGTH: usize = (1 << 31) - 1;
 
 /// Maximal allowed depth of BCS data, counting only structs and enums.
-pub const MAX_CONTAINER_DEPTH: usize = 500;
+pub const MAX_CONTAINER_DEPTH: usize = 1500;
 
 pub use de::{
     from_bytes, from_bytes_seed, from_bytes_seed_with_limit, from_bytes_with_limit, from_reader,
